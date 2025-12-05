@@ -1,4 +1,4 @@
-/* --- Vari·veis e Reset --- */
+/* --- Vari√°veis e Reset --- */
 :root {
     --bg-color: #121212;
     --card-bg: #1e1e1e;
@@ -38,7 +38,7 @@ nav a.nav-link.active {
     position: relative;
 }
 
-/* Um pequeno traÁo embaixo do item ativo */
+/* Um pequeno tra√ßo embaixo do item ativo */
 nav a.nav-link.active::after {
     content: '';
     position: absolute;
@@ -87,7 +87,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* Garante que a imagem n„o vaze se for maior */
+    overflow: hidden; /* Garante que a imagem n√£o vaze se for maior */
     /* border-radius: 4px; <-- Opcional: Descomente se quiser bordas arredondadas na raposa */
 }
 
@@ -95,10 +95,10 @@ header {
 .logo .logo-img-container img {
     width: 100%;  /* A imagem vai ocupar 100% dos 50px do container */
     height: 100%; /* A imagem vai ocupar 100% dos 50px do container */
-    object-fit: contain; /* Garante que a raposa inteira apareÁa sem ficar esticada/distorcida */
+    object-fit: contain; /* Garante que a raposa inteira apare√ßa sem ficar esticada/distorcida */
 }
 
-/* Pequeno ajuste para o texto n„o ficar muito colado na imagem maior */
+/* Pequeno ajuste para o texto n√£o ficar muito colado na imagem maior */
 .logo {
     gap: 15px; /* Aumentei um pouco o gap original que era 10px */
 }
@@ -181,7 +181,7 @@ nav a:hover { color: var(--accent-red); }
     padding-bottom: 60px;
 }
 
-/* --- NotÌcias --- */
+/* --- Not√≠cias --- */
 .section-title {
     font-size: 1.5rem;
     margin-bottom: 25px;
@@ -233,6 +233,12 @@ nav a:hover { color: var(--accent-red); }
     font-size: 0.8rem;
     font-weight: bold;
     border: 2px solid white;
+}
+
+.js-grid-loading .news-card {
+    /* For√ßa o display: none antes do JS carregar */
+    display: none !important; 
+    opacity: 0;
 }
 
 .category-text {
@@ -310,7 +316,7 @@ footer {
 .social-icons a { color: var(--text-secondary); margin-right: 15px; font-size: 1.2rem; }
 .copyright { text-align: center; border-top: 1px solid #222; padding-top: 20px; font-size: 0.8rem; color: #555; }
 
-/* --- PaginaÁ„o --- */
+/* --- Pagina√ß√£o --- */
 .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 40px; }
 .page-btn {
     width: 40px; height: 40px;
@@ -328,7 +334,7 @@ footer {
 }
 
 @media (max-width: 768px) {
-    /* CORRE«√O DO LAYOUT (TORTO) */
+    /* CORRE√á√ÉO DO LAYOUT (TORTO) */
     .container {
         padding-left: 25px;
         padding-right: 25px;
@@ -368,25 +374,25 @@ footer {
 }
 
 
-/* --- AnimaÁ„o para a PaginaÁ„o --- */
+/* --- Anima√ß√£o para a Pagina√ß√£o --- */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .news-card {
-    /* Garante que a animaÁ„o rode sempre que o card for exibido */
+    /* Garante que a anima√ß√£o rode sempre que o card for exibido */
     animation: fadeIn 0.5s ease forwards;
 }
 
-/* Classe utilit·ria para esconder cards via JS */
+/* Classe utilit√°ria para esconder cards via JS */
 .hide {
     display: none !important;
 }
 
 
 /* =========================================
-   ESTILO DA BUSCA (EXPANSÕVEL)
+   ESTILO DA BUSCA (EXPANS√çVEL)
    ========================================= */
 
 .header-actions {
@@ -432,11 +438,11 @@ footer {
     font-size: 1rem;
     transition: 0.4s;
     line-height: 40px;
-    width: 0; /* ComeÁa escondido */
+    width: 0; /* Come√ßa escondido */
     padding: 0;
 }
 
-/* Quando a classe 'active' È adicionada via JS, o input cresce */
+/* Quando a classe 'active' √© adicionada via JS, o input cresce */
 .search-box.active #search-input {
     width: 200px;
     padding: 0 10px;
@@ -498,7 +504,7 @@ ul {
     z-index: 1;
     width: 30px;
     height: 30px;
-    /* Adiciona a cor base do Ìcone (o que era #4d4d4d) */
+    /* Adiciona a cor base do √≠cone (o que era #4d4d4d) */
     fill: #4d4d4d;
     transition: fill 0.3s ease-in-out;
 }
@@ -509,7 +515,7 @@ ul {
 
 .example-2 .icon-content a:hover svg path {
     fill: white;
-    transition: fill 0.3s ease-in-out; /* Adiciona transiÁ„o ‡ cor do Ìcone */
+    transition: fill 0.3s ease-in-out; /* Adiciona transi√ß√£o √† cor do √≠cone */
 }
 
 .example-2 .icon-content a .filled {
@@ -547,5 +553,6 @@ ul {
 .example-2 .icon-content a[data-social="LinkedIn"] ~ .tooltip {
   background: #0077B5; /* LinkedIn Blue */
 }
+
 
 
