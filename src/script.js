@@ -698,8 +698,12 @@ if (newsGrid) {
             }
         });
     }
+   
 
     // --- INICIALIZAÇÃO GARANTIDA ---
     // ESTE É O BLOCO QUE CORRIGE O BUG: Garante que a Paginação comece escondida.
     showPage(1);
+
+   newsGrid.classList.remove('js-grid-loading');
+
 }
