@@ -1,0 +1,551 @@
+/* --- Variáveis e Reset --- */
+:root {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #ffffff;
+    --text-secondary: #a0a0a0;
+    --accent-red: #b93b46;
+    --accent-hover: #d14e5a;
+    --border-color: #333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; }
+
+a.news-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex; /* Garante comportamento de bloco flex */
+    flex-direction: column;
+}
+
+/* Estilo para o link do menu quando estiver ativo */
+nav a.nav-link.active {
+    color: var(--accent-red);
+    position: relative;
+}
+
+/* Um pequeno traço embaixo do item ativo */
+nav a.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent-red);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Header --- */
+header {
+    background-color: #161616;
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    gap: 10px;
+}
+
+/* 1. Ajusta o container da imagem (o span) */
+.logo .logo-img-container {
+    /* background: var(--accent-red); <-- REMOVIDO O FUNDO VERMELHO */
+    width: 50px;  /* Definimos um tamanho um pouco maior que os 30px anteriores */
+    height: 50px; /* Mantemos quadrado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Garante que a imagem não vaze se for maior */
+    /* border-radius: 4px; <-- Opcional: Descomente se quiser bordas arredondadas na raposa */
+}
+
+/* 2. Regra para a imagem dentro do container */
+.logo .logo-img-container img {
+    width: 100%;  /* A imagem vai ocupar 100% dos 50px do container */
+    height: 100%; /* A imagem vai ocupar 100% dos 50px do container */
+    object-fit: contain; /* Garante que a raposa inteira apareça sem ficar esticada/distorcida */
+}
+
+/* Pequeno ajuste para o texto não ficar muito colado na imagem maior */
+.logo {
+    gap: 15px; /* Aumentei um pouco o gap original que era 10px */
+}
+
+nav ul {
+    display: flex;
+    gap: 25px;
+}
+
+nav a:hover { color: var(--accent-red); }
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-subscribe {
+    background-color: var(--accent-red);
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.btn-subscribe:hover { background-color: var(--accent-hover); }
+
+/* --- Hero Section --- */
+.hero {
+    position: relative;
+    height: 450px;
+    background: url('img/rpg.png') no-repeat center center/cover;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 40px;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, rgba(18,18,18,1) 0%, rgba(18,18,18,0.2) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding-bottom: 40px;
+    max-width: 800px;
+}
+
+.tag {
+    background-color: var(--accent-red);
+    color: white;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.hero p {
+    color: #ccc;
+    font-size: 1rem;
+    max-width: 600px;
+}
+
+/* --- Layout Principal --- */
+.main-layout {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 40px;
+    padding-bottom: 60px;
+}
+
+/* --- Notícias --- */
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    border-left: 4px solid var(--accent-red);
+    padding-left: 15px;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.news-card {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.news-card:hover .card-image img { transform: scale(1.05); }
+
+.score-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--accent-red);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: 2px solid white;
+}
+
+.category-text {
+    color: var(--accent-red);
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.news-card h3 {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+/* --- Sidebar --- */
+.sidebar-widget {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.top-list li {
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+    display: flex;
+    gap: 15px;
+}
+.top-list li:last-child { border-bottom: none; }
+
+.rank-number {
+    color: var(--accent-red);
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 0.5;
+}
+
+.top-list h4 { font-size: 0.95rem; line-height: 1.3; }
+
+/* Newsletter */
+.widget-newsletter { background-color: var(--accent-red); color: white; }
+.widget-newsletter input {
+    width: 100%; padding: 12px; margin: 15px 0;
+    border: none; border-radius: 4px;
+    background: rgba(255,255,255,0.2); color: white;
+}
+.widget-newsletter input::placeholder { color: rgba(255,255,255,0.7); }
+.widget-newsletter button {
+    width: 100%; padding: 12px;
+    background: white; color: var(--accent-red);
+    border: none; font-weight: bold;
+    border-radius: 4px; cursor: pointer;
+}
+
+/* --- Footer --- */
+footer {
+    background-color: #0f0f0f;
+    padding: 60px 0 20px 0;
+    border-top: 1px solid #222;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.footer-col h4 { color: white; margin-bottom: 20px; font-size: 1.1rem; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { color: var(--text-secondary); font-size: 0.9rem; }
+.footer-col ul li a:hover { color: white; }
+.social-icons a { color: var(--text-secondary); margin-right: 15px; font-size: 1.2rem; }
+.copyright { text-align: center; border-top: 1px solid #222; padding-top: 20px; font-size: 0.8rem; color: #555; }
+
+/* --- Paginação --- */
+.pagination { display: flex; justify-content: center; gap: 10px; margin-top: 40px; }
+.page-btn {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    background: #1a1a1a; border-radius: 4px; cursor: pointer;
+}
+.page-btn.active { background: var(--accent-red); }
+
+/* --- CSS MOBILE (Responsividade) --- */
+.mobile-btn {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    /* CORREÇÃO DO LAYOUT (TORTO) */
+    .container {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+    .hero-content { text-align: center; }
+    .hero-content .tag { display: block; margin: 0 auto 10px auto; width: fit-content; }
+
+    .search-box #search-input {
+        width: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .main-layout { grid-template-columns: 1fr; }
+    .news-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+
+    /* MENU DIREITA + HIDE ACTIONS */
+    .header-actions { display: none !important; } /* Esconde busca/assinar */
+    .header-content { justify-content: space-between; } /* Joga logo p/ esquerda, btn p/ direita */
+    
+    .mobile-btn { display: block; z-index: 200;}
+
+    /* DRAWER DO MENU */
+    .navbar {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 70%; height: 100vh;
+        background-color: #121212;
+        border-left: 1px solid #333;
+        transition: right 0.4s ease;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        z-index: 99;
+    }
+    .navbar.active { right: 0; }
+    .navbar ul { flex-direction: column; gap: 30px; }
+}
+
+
+/* --- Animação para a Paginação --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.news-card {
+    /* Garante que a animação rode sempre que o card for exibido */
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Classe utilitária para esconder cards via JS */
+.hide {
+    display: none !important;
+}
+
+
+/* =========================================
+   ESTILO DA BUSCA (EXPANSÍVEL)
+   ========================================= */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
+.search-box {
+    background-color: #222; /* Fundo levemente mais claro que o header */
+    height: 40px;
+    border-radius: 40px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    transition: 0.4s;
+    border: 1px solid #333;
+}
+
+.search-box:hover, 
+.search-box.active {
+    border-color: var(--accent-red); /* Fica vermelho ao passar o mouse ou ativar */
+    background-color: #1a1a1a;
+}
+
+#search-btn {
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+#search-input {
+    border: none;
+    background: none;
+    outline: none;
+    color: white;
+    font-size: 1rem;
+    transition: 0.4s;
+    line-height: 40px;
+    width: 0; /* Começa escondido */
+    padding: 0;
+}
+
+/* Quando a classe 'active' é adicionada via JS, o input cresce */
+.search-box.active #search-input {
+    width: 200px;
+    padding: 0 10px;
+}
+
+
+/* redes Sociais */
+
+/* From Uiverse.io by PriyanshuGupta28 */ 
+ul {
+  list-style: none;
+}
+
+.example-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.example-2 .icon-content {
+  margin: 0 10px;
+  position: relative;
+}
+.example-2 .icon-content .tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 5px;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+.example-2 .icon-content:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: -50px;
+}
+.example-2 .icon-content a {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: #4d4d4d;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+.example-2 .icon-content a:hover {
+  box-shadow: 3px 2px 45px 0px rgb(0 0 0 / 12%);
+}
+.example-2 .icon-content a svg {
+    position: relative;
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+    /* Adiciona a cor base do ícone (o que era #4d4d4d) */
+    fill: #4d4d4d;
+    transition: fill 0.3s ease-in-out;
+}
+
+.example-2 .icon-content a:hover {
+  box-shadow: 3px 2px 45px 0px rgb(0 0 0 / 12%);
+}
+
+.example-2 .icon-content a:hover svg path {
+    fill: white;
+    transition: fill 0.3s ease-in-out; /* Adiciona transição à cor do ícone */
+}
+
+.example-2 .icon-content a .filled {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: #000;
+  transition: all 0.3s ease-in-out;
+}
+.example-2 .icon-content a:hover .filled {
+  height: 100%;
+}
+.example-2 .icon-content a[data-social="instagram"] .filled,
+.example-2 .icon-content a[data-social="instagram"] ~ .tooltip {
+  background: linear-gradient(
+        45deg, 
+        #f09433 0%, 
+        #e6683c 25%, 
+        #dc2743 50%, 
+        #cc2366 75%, 
+        #bc1888 100%);
+}
+.example-2 .icon-content a[data-social="GitHub"] .filled,
+.example-2 .icon-content a[data-social="GitHub"] ~ .tooltip {
+  background: #4078c0; /* GitHub Blue */
+}
+.example-2 .icon-content a[data-social="WhatsApp"] .filled,
+.example-2 .icon-content a[data-social="WhatsApp"] ~ .tooltip {
+  background: #25D366; /* WhatsApp Green */
+}
+.example-2 .icon-content a[data-social="LinkedIn"] .filled,
+.example-2 .icon-content a[data-social="LinkedIn"] ~ .tooltip {
+  background: #0077B5; /* LinkedIn Blue */
+}
+
+
