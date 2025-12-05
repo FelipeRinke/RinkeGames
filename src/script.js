@@ -571,61 +571,52 @@ const noticiasDB = [
 ];
 
 /* =========================================
-   2. L�GICA DA P�GINA DE NOT�CIA (noticia.html)
+   2. LÓGICA DA PÁGINA DE NOTÍCIA (noticia.html)
    ========================================= */
 const newsTitleElement = document.getElementById('news-title');
 
 if (newsTitleElement) {
-    // 1. Pega o ID da URL
+    // Código para carregar os dados na página de detalhe
     const params = new URLSearchParams(window.location.search);
     const newsId = parseInt(params.get('id'));
 
-    // 2. Busca no banco de dados
     const noticia = noticiasDB.find(item => item.id === newsId);
 
-    // 3. Preenche a tela
     if (noticia) {
         document.getElementById('news-category').innerText = noticia.categoria;
         document.getElementById('news-title').innerText = noticia.titulo;
         document.getElementById('news-img').src = noticia.imagem;
-        document.getElementById('news-body').innerHTML = noticia.texto;
-        document.title = `${noticia.titulo} - Gamer News`;
+        
+        // Usa innerHTML para processar tags <strong> e <img>
+        document.getElementById('news-body').innerHTML = noticia.texto.replace(/\n/g, '<br>');
+        
+        document.title = `${noticia.titulo} - RINKE NEWS`;
     } else {
-        // Se o ID n�o existir no banco
         document.getElementById('news-title').innerText = "Notícia não encontrada";
         document.getElementById('news-body').innerHTML = "<p>O ID solicitado não existe no banco de dados.</p>";
     }
 }
 
+
 /* =========================================
-   3. MENU MOBILE & PAGINA��O (HOME)
+   3. LÓGICA DO MENU MOBILE & PAGINAÇÃO (HOME)
    ========================================= */
-const mobileBtn = document.querySelector('.mobile-btn');
 
-// Verifica se estamos na Home (se o bot�o mobile existe)
-if (mobileBtn) {
+// Verifica se está na Home (se o grid existe)
+if (newsGrid) { 
+    const mobileBtn = document.querySelector('.mobile-btn');
     const navbar = document.querySelector('.navbar');
-    const mobileBtnIcon = document.querySelector('.mobile-btn i');
-
-    // Toggle Menu
-    mobileBtn.addEventListener('click', () => {
-        navbar.classList.toggle('active');
-        const isOpen = navbar.classList.contains('active');
-        if (isOpen) {
-            mobileBtnIcon.classList.remove('fa-bars');
-            mobileBtnIcon.classList.add('fa-times');
-        } else {
-            mobileBtnIcon.classList.remove('fa-times');
-            mobileBtnIcon.classList.add('fa-bars');
-        }
-    });
-
-    // Pagina��o
+    const mobileBtnIcon = document.querySelector('.fas.fa-bars');
+    
+    // Elementos de Paginação e Cards
     const cards = document.querySelectorAll('.news-card');
-    const pageBtns = document.querySelectorAll('.page-btn');
+    const pageBtns = document.querySelectorAll('.page-btn'); 
     const itemsPerPage = 6;
     let currentPage = 1;
+    
+    // --- FUNÇÕES PRINCIPAIS ---
 
+    // Função para mostrar a página correta
     function showPage(page) {
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
@@ -633,10 +624,11 @@ if (mobileBtn) {
         cards.forEach((card, index) => {
             if (index >= start && index < end) {
                 card.classList.remove('hide');
-                card.style.display = 'flex';
-                // Reinicia anima��o
+                card.style.display = 'flex'; 
+                
+                // Reinicia animação
                 card.style.animation = 'none';
-                card.offsetHeight;
+                card.offsetHeight; 
                 card.style.animation = 'fadeIn 0.5s ease forwards';
             } else {
                 card.classList.add('hide');
@@ -644,187 +636,151 @@ if (mobileBtn) {
             }
         });
 
-        // Atualiza bot�es
+        // Atualiza botões
         pageBtns.forEach(btn => btn.classList.remove('active'));
         if (pageBtns[page]) pageBtns[page].classList.add('active');
-
+        
         currentPage = page;
     }
 
-    // Eventos de clique na pagina��o
+    // Função auxiliar para voltar ao estado inicial (Página 1)
+    function resetSearch() {
+        if (paginationContainer) {
+            paginationContainer.style.display = 'flex'; // Mostra paginação
+        }
+        showPage(1); // Volta para a página 1
+        
+        // Remove classe ativa dos filtros do menu
+        document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+        document.querySelector('.nav-link[data-category="all"]').classList.add('active');
+    }
+    
+    // --- EVENTOS ---
+
+    // Eventos de clique na paginação
     pageBtns.forEach((btn, index) => {
         btn.addEventListener('click', () => {
             if (index === 0) { // Seta Esquerda
                 if (currentPage > 1) showPage(currentPage - 1);
             } else if (index === pageBtns.length - 1) { // Seta Direita
-                if (currentPage < 2) showPage(currentPage + 1);
-            } else { // N�meros
+                if (currentPage < 3) showPage(currentPage + 1); // 3 é o total de páginas
+            } else { // Números (1, 2, 3)
                 showPage(index);
             }
         });
     });
 
-    /* =========================================
-   4. SISTEMA DE FILTRAGEM (NAVBAR)
-   ========================================= */
-    const navLinks = document.querySelectorAll('.nav-link');
-    const paginationContainer = document.querySelector('.pagination');
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault(); // Impede a tela de pular para o topo
-
-            // 1. Remove a classe 'active' de todos e adiciona no clicado
-            navLinks.forEach(nav => nav.classList.remove('active'));
-            link.classList.add('active');
-
-            // 2. Pega a categoria selecionada
-            const categoryToFilter = link.getAttribute('data-category');
-
-            // 3. L�gica de Filtragem
-            const allCards = document.querySelectorAll('.news-card');
-
-            // Se clicou em "Todas", reseta tudo (mostra pagina��o e roda a fun��o da p�gina 1)
-            if (categoryToFilter === 'all') {
-                paginationContainer.style.display = 'flex'; // Volta a pagina��o
-                showPage(1); // Volta para a p�gina 1 padr�o
-                return;
+    // Evento de Toggle do Menu Mobile
+    if (mobileBtn) {
+        mobileBtn.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+            const isOpen = navbar.classList.contains('active');
+            if (isOpen) {
+                mobileBtnIcon.classList.remove('fa-bars');
+                mobileBtnIcon.classList.add('fa-times');
+            } else {
+                mobileBtnIcon.classList.remove('fa-times');
+                mobileBtnIcon.classList.add('fa-bars');
             }
+        });
+    }
 
-            // Se for uma categoria espec�fica, esconde a pagina��o (mostra tudo numa lista s�)
-            paginationContainer.style.display = 'none';
+    // --- INICIALIZAÇÃO ---
+    // Isso garante que a página 1 seja carregada imediatamente, escondendo as demais.
+    showPage(1); 
+}
 
+
+/* =========================================
+   4. LÓGICA DA BUSCA (DESKTOP E MOBILE)
+   ========================================= */
+const searchBox = document.querySelector('.search-box');
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+
+if (searchBtn) {
+    // 1. Abrir/Fechar a barra de pesquisa (Desktop)
+    searchBtn.addEventListener('click', () => {
+        searchBox.classList.toggle('active');
+        
+        if (searchBox.classList.contains('active')) {
+            searchInput.focus();
+        } else {
+            searchInput.value = '';
+            resetSearch();
+        }
+    });
+
+    // 2. Filtrar notícias enquanto digita
+    searchInput.addEventListener('keyup', (e) => {
+        const termo = e.target.value.toLowerCase();
+        const allCards = document.querySelectorAll('.news-card');
+
+        if (termo.length > 0) {
+            if (paginationContainer) {
+                paginationContainer.style.display = 'none'; // Esconde paginação
+            }
+            
+            // Remove o filtro de categoria se estiver ativo
+            document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+            
             allCards.forEach(card => {
-                // Pega o texto da categoria dentro do card (ex: "Hardware")
-                const cardCategory = card.querySelector('.category-text').innerText;
-
-                // Compara (ignorando mai�sculas/min�sculas e espa�os)
-                if (cardCategory.trim() === categoryToFilter) {
+                const titulo = card.querySelector('h3').innerText.toLowerCase();
+                
+                if (titulo.includes(termo)) {
                     card.classList.remove('hide');
                     card.style.display = 'flex';
-
-                    // Anima��ozinha
-                    card.style.animation = 'none';
-                    card.offsetHeight;
-                    card.style.animation = 'fadeIn 0.5s ease forwards';
                 } else {
                     card.classList.add('hide');
                     card.style.display = 'none';
                 }
             });
+        } else {
+            resetSearch(); // Volta ao estado normal (Todas as categorias, Pagina 1)
+        }
+    });
+}
+
+
+/* =========================================
+   5. LÓGICA DOS FILTROS (NAVBAR)
+   ========================================= */
+const navLinks = document.querySelectorAll('.nav-link');
+
+navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault(); 
+
+        navLinks.forEach(nav => nav.classList.remove('active'));
+        link.classList.add('active');
+
+        const categoryToFilter = link.getAttribute('data-category');
+        const allCards = document.querySelectorAll('.news-card');
+
+        // Lógica de Filtragem
+        if (categoryToFilter === 'all') {
+            resetSearch(); // Reseta tudo
+            return;
+        }
+
+        // Se for uma categoria específica, esconde a paginação
+        paginationContainer.style.display = 'none';
+        searchInput.value = ''; // Limpa a busca
+
+        allCards.forEach(card => {
+            const cardCategory = card.querySelector('.category-text').innerText;
+
+            if (cardCategory.trim() === categoryToFilter) {
+                card.classList.remove('hide');
+                card.style.display = 'flex';
+            } else {
+                card.classList.add('hide');
+                card.style.display = 'none';
+            }
         });
     });
-
-    /* =========================================
-   5. SISTEMA DE BUSCA (SEARCH BAR)
-   ========================================= */
-    const searchBtn = document.getElementById('search-btn');
-    const searchBox = document.querySelector('.search-box');
-    const searchInput = document.getElementById('search-input');
-
-    // 1. Abrir/Fechar a barra de pesquisa
-    if (searchBtn) {
-        searchBtn.addEventListener('click', () => {
-            searchBox.classList.toggle('active');
-
-            // Se abriu, foca no input. Se fechou, limpa o texto.
-            if (searchBox.classList.contains('active')) {
-                searchInput.focus();
-            } else {
-                searchInput.value = '';
-                resetSearch(); // Fun��o para voltar ao normal (veja abaixo)
-            }
-        });
-    }
-
-    // 2. Filtrar not�cias enquanto digita
-    if (searchInput) {
-        searchInput.addEventListener('keyup', (e) => {
-            const termo = e.target.value.toLowerCase();
-            const allCards = document.querySelectorAll('.news-card');
-            const pagination = document.querySelector('.pagination');
-
-            if (termo.length > 0) {
-                // Esconde pagina��o durante a busca
-                pagination.style.display = 'none';
-
-                allCards.forEach(card => {
-                    const titulo = card.querySelector('h3').innerText.toLowerCase();
-
-                    // Se o t�tulo cont�m o termo digitado
-                    if (titulo.includes(termo)) {
-                        card.classList.remove('hide');
-                        card.style.display = 'flex';
-                    } else {
-                        card.classList.add('hide');
-                        card.style.display = 'none';
-                    }
-                });
-            } else {
-                // Se apagou tudo, reseta
-                resetSearch();
-            }
-        });
-    }
-
-    // Fun��o auxiliar para voltar ao estado inicial (P�gina 1)
-    function resetSearch() {
-        const pagination = document.querySelector('.pagination');
-        pagination.style.display = 'flex'; // Mostra pagina��o
-        showPage(1); // Volta para a p�gina 1
-
-        // Remove classe ativa dos filtros do menu (opcional, para visual limpo)
-        document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-        document.querySelector('.nav-link[data-category="all"]').classList.add('active');
-    }
-
-
-    /* =========================================
-       5. L�GICA DO NEWSLETTER
-       ========================================= */
-
-    const newsletterForm = document.getElementById('newsletter-form');
-    const newsletterInput = document.getElementById('newsletter-email');
-    const newsletterFeedback = document.getElementById('newsletter-feedback');
-
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Impede o envio real e o recarregamento da p�gina
-
-            const email = newsletterInput.value.trim();
-
-            // Limpa mensagens anteriores
-            newsletterFeedback.style.display = 'none';
-
-            // 1. Valida��o b�sica de email
-            if (email === '' || !email.includes('@') || !email.includes('.')) {
-
-                // Feedback de Erro
-                newsletterFeedback.innerText = 'Por favor, insira um email v�lido.';
-                newsletterFeedback.style.backgroundColor = '#8c3d44'; /* Cor escura do vermelho */
-                newsletterFeedback.style.padding = '5px 10px';
-                newsletterFeedback.style.borderRadius = '4px';
-                newsletterFeedback.style.display = 'block';
-
-            } else {
-                // 2. Simula��o de Sucesso (com feedback visual)
-
-                // Feedback de Sucesso
-                newsletterFeedback.innerText = `E-mail ${email} cadastrado com sucesso!`;
-                newsletterFeedback.style.backgroundColor = '#387c3d'; /* Cor verde */
-                newsletterFeedback.style.padding = '5px 10px';
-                newsletterFeedback.style.borderRadius = '4px';
-                newsletterFeedback.style.display = 'block';
-
-                // Limpa o campo ap�s 2 segundos
-                setTimeout(() => {
-                    newsletterInput.value = '';
-                    newsletterFeedback.style.display = 'none';
-                }, 3000);
-            }
-        });
-    }
-
+});
     // Inicia na p�gina 1
     showPage(1);
+
 }
